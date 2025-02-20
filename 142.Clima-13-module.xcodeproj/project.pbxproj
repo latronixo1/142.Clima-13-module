@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6BACD2172D6756B3004B1088 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6BACD2162D6756B3004B1088 /* SnapKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		6BA490002D66917200E29BE1 /* 142.Clima-13-module.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "142.Clima-13-module.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -15,6 +19,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				"SnapKit-develop",
 			);
 			target = 6BA48FFF2D66917200E29BE1 /* 142.Clima-13-module */;
 		};
@@ -36,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BACD2172D6756B3004B1088 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +84,7 @@
 			);
 			name = "142.Clima-13-module";
 			packageProductDependencies = (
+				6BACD2162D6756B3004B1088 /* SnapKit */,
 			);
 			productName = "142.Clima-13-module";
 			productReference = 6BA490002D66917200E29BE1 /* 142.Clima-13-module.app */;
@@ -107,6 +114,9 @@
 			);
 			mainGroup = 6BA48FF72D66917200E29BE1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6BACD2152D6756B3004B1088 /* XCLocalSwiftPackageReference "../../SnapKit-develop" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6BA490012D66917200E29BE1 /* Products */;
 			projectDirPath = "";
@@ -148,6 +158,8 @@
 				DEVELOPMENT_TEAM = Z4PKJ57KTJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "142.Clima-13-module/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Погода";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -175,6 +187,8 @@
 				DEVELOPMENT_TEAM = Z4PKJ57KTJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "142.Clima-13-module/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Погода";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -333,6 +347,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		6BACD2152D6756B3004B1088 /* XCLocalSwiftPackageReference "../../SnapKit-develop" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../SnapKit-develop";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6BACD2162D6756B3004B1088 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6BA48FF82D66917200E29BE1 /* Project object */;
 }
