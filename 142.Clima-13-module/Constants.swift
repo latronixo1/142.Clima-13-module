@@ -11,8 +11,8 @@ enum Constants {
     static let background = "background"
     static let weatherColor = "weatherColor"
     static let celsius = "°"
-    static let searchSF = "magnifyingglass" //перевод magnifyingglass - увеличить в стекле
-    static let geoSF = "location.circle.fill"
+    static let searchSF = "magnifyingglass" //картинка в виде лупы для кнопки поиска, изображение будет браться из SF Symbols
+    static let geoSF = "location.circle.fill" //картинка для кнопки определения геопозиции, изображение будет браться из SF Symbols
     static let search = "Search"
-    static let condition = "cloud.rain"
+    static let conditionSF = "cloud.rain"
 }
