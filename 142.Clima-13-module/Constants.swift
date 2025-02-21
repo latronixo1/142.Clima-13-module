@@ -10,7 +10,7 @@ import Foundation
 enum Constants {
     static let background = "background"
     static let weatherColor = "weatherColor"
-    static let celsius = "°"
+    static let celsius = "°C"
     static let searchSF = "magnifyingglass" //картинка в виде лупы для кнопки поиска, изображение будет браться из SF Symbols
     static let geoSF = "location.circle.fill" //картинка для кнопки определения геопозиции, изображение будет браться из SF Symbols
     static let search = "Search"
