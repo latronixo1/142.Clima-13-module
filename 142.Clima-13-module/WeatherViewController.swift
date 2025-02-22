@@ -8,8 +8,10 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+class WeatherViewController: UIViewController {
 
+    // MARK: - UI
+    
     private lazy var backgroundImageView: UIImageView = {
         let element = UIImageView()
         element.image = UIImage(named: Constants.background)    //отсылка на файл Constants.swift, который есть у нас в проекте, там в этой переменной есть имя файла
@@ -113,6 +115,8 @@ class ViewController: UIViewController {
     
     let emptyView = UIView()
     
+    // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setViews()
@@ -120,6 +124,8 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .green
     }
+    
+    // MARK: - setup Views
     
     private func setViews() {
         view.addSubview(backgroundImageView)
@@ -148,7 +154,9 @@ class ViewController: UIViewController {
 
 }
 
-extension ViewController {
+// MARK: - Set Constraints
+
+extension WeatherViewController {
     private func setupConstaints() {
 
         backgroundImageView.snp.makeConstraints { make in   //make - это то, что написано в начале строки (в данном случае это backgroundImageView

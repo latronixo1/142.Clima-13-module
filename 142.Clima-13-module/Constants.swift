@@ -15,4 +15,6 @@ enum Constants {
     static let geoSF = "location.circle.fill" //картинка для кнопки определения геопозиции, изображение будет браться из SF Symbols
     static let search = "Search"
     static let conditionSF = "cloud.rain"
+    static let id = "3aa4ca9c1555ba5bb6de5e222cede661"  // мой id на сайте openweathermap.org
+    
 }
