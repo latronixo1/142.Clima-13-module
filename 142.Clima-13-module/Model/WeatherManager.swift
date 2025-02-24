@@ -45,7 +45,7 @@ struct WeatherManager {
         let session = URLSession(configuration: .default)   //инициализатор
         
         //3. создаем задание для URL сессии и сразу (в фигурных скобках) обработчик полученного результата
-        //результатом сессии будет data, resonse и error
+        //результатом сессии будет data, response и error
         let task = session.dataTask(with: url) { data, response, error in
             
             //если ошибка,
@@ -55,7 +55,7 @@ struct WeatherManager {
                 return
             }
             
-            //безопасно извлекаю опциональные переменные data и parseJSON
+            //безопасно извлекаю опциональные переменные data (есть вероятность что от сервера ничего не придет) и parseJSON (есть вероятность что ничего не удастся извлечь из того, что пришло, если оно пришло)
             guard let safeData = data else  { return }
             guard let weather = parseJSON(safeData) else { return }
             delegate?.didUpdateWeather(weather: weather)
@@ -79,16 +79,19 @@ struct WeatherManager {
             //пробуем (try) декодировать
             let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
             
+            //Вариант 1. Инициализация структуры при помощи инициализатора по умолчанию
             let id = decodedData.weather[0].id
             let temp = decodedData.main.temp
             let name = decodedData.name
             
             let weather = WeatherModel(conditionId: id, cityName: name, temperature: temp)
             
+            //Вариант 2. Инициализация структуры при помощи дополнительного инициализатора
 //            let weather = WeatherModel(weatherData: decodedData)
             
             return weather
-        } catch let error {
+        } catch let error {     //можно и просто написать catch {, результат будет тот же
+            //в этом блоке мы можем обработать ошибки блока do. Но здесь мы просто вызываем
             delegate?.didFailWithError(error: error)
             return nil
         }

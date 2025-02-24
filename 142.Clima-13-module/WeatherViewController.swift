@@ -6,7 +6,8 @@
 //
 
 import UIKit
-import SnapKit
+import SnapKit      //для сокращенных констрейнтов
+import CoreLocation //для получения геопозиции
 
 class WeatherViewController: UIViewController {
 
@@ -42,6 +43,7 @@ class WeatherViewController: UIViewController {
     private lazy var geoButton: UIButton = {
         let element = UIButton(type: .system)
         element.setImage(UIImage(systemName: Constants.geoSF), for: .normal)    //картинку для кнопки возьмем из SF (имя символа записано в Constants.geoSF)
+        element.addTarget(self, action: #selector(locationPressed), for: .touchUpInside)
         element.tintColor = .label  //.label - в соответствии с темой (Dark theme или Light theme)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
@@ -65,13 +67,14 @@ class WeatherViewController: UIViewController {
     private lazy var searchButton: UIButton = {
         let element = UIButton(type: .system)
         element.setImage(UIImage(systemName: Constants.searchSF), for: .normal)    //картинку для кнопки возьмем из SF (имя символа записано в Constants.searchSF)
+        element.addTarget(self, action: #selector(searchPressed), for: .touchUpInside)
         element.tintColor = .label  //.label - в соответствии с темой (Dark theme или Light theme)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     //иконка погоды
-    private lazy var condtitionalImageView: UIImageView = {
+    private lazy var condtitionImageView: UIImageView = {
         let element = UIImageView()
         element.image = UIImage(systemName: Constants.conditionSF)
         element.tintColor = UIColor(named: Constants.weatherColor)
@@ -115,14 +118,47 @@ class WeatherViewController: UIViewController {
     
     let emptyView = UIView()
     
+    // MARK: - Private Properties
+    
+    private var weatherManager = WeatherManager()       //менеджер получения данных о погоде
+    private let locationManager = CLLocationManager() //менеджер геолокации
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setViews()
         setupConstaints()
+        setDelegates()
+        setupLocationSettings()
         
-        view.backgroundColor = .green
+    }
+    
+    // MARK: - Private Methods
+    
+    private func setDelegates() {
+        //Устанавливаем себя в качестве делегата для следующих: текстовое поле, менеджер погоды и менеджер геолокации. По сути мы перечисляем, у кого мы будем получать информацию по ИХ инициативе
+        searchTextField.delegate = self
+        weatherManager.delegate = self
+        locationManager.delegate = self
+    }
+    
+    //запрашивает геолокацию. У пользователя появится окошко с вариантами выбора "Разрешить всегда", "Разрешить при использовании", "Запретить"
+    private func setupLocationSettings() {
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+    }
+
+    // MARK: - Actions
+    
+    //по нажатию на лупу скроем клавиатуру
+    @objc func searchPressed(_ sender: UIButton) {
+        searchTextField.endEditing(true)
+    }
+    
+    //нажание на кнопку геолокации
+    @objc func locationPressed(_sender: UIButton) {
+        locationManager.requestLocation()   //считать геолокацию принудительно
     }
     
     // MARK: - setup Views
@@ -137,7 +173,7 @@ class WeatherViewController: UIViewController {
             headerStackView.addArrangedSubview(searchTextField)
             headerStackView.addArrangedSubview(searchButton)
         
-        mainStackView.addArrangedSubview(condtitionalImageView)
+        mainStackView.addArrangedSubview(condtitionImageView)
         mainStackView.addArrangedSubview(tempStackView)
         
             tempStackView.addArrangedSubview(tempLabel)
@@ -145,13 +181,80 @@ class WeatherViewController: UIViewController {
         
         mainStackView.addArrangedSubview(cityLabel)
         mainStackView.addArrangedSubview(emptyView)
-        
-        tempLabel.text = "21"
-        tempTypeLabel.text = Constants.celsius
-        cityLabel.text = "London"
     }
- 
+}
 
+// MARK: - CLLocationManagerDelegate
+
+extension WeatherViewController: CLLocationManagerDelegate{
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        guard let location = locations.last else { return }
+        locationManager.stopUpdatingLocation()
+        let lat = location.coordinate.latitude
+        let lon = location.coordinate.longitude
+        weatherManager.fetchWeather(latitide: lat, longitude: lon)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+    }
+}
+
+// MARK: - WeatherManagerDelegate
+
+extension WeatherViewController: WeatherManagerDelegate {
+    func didUpdateWeather(weather: WeatherModel) {
+        DispatchQueue.main.async {
+            self.tempLabel.text = weather.temperatureString
+            self.tempTypeLabel.text = Constants.celsius
+            self.condtitionImageView.image = UIImage(systemName: weather.getConditionName)
+            self.cityLabel.text = weather.cityName
+        }
+    }
+    func didFailWithError(error: Error) {
+        print(error)
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+//расширение WeatherViewController для работы с UITextField
+extension WeatherViewController: UITextFieldDelegate {
+    
+    //Должны ли мы обрабатывать событие нажания Enter (Return)?
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //при этом нужно скрыть клавиатуру
+        searchTextField.endEditing(true)
+        //Да, должны
+        return true
+    }
+    
+    //Действительно ли мы хотим закончить редактирование?
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        //Если в поле ввода текста что-то есть, то ничего
+        if !textField.text!.isEmpty {
+            //Да, закончить
+            return true
+        } else {
+            //а если ничего нет, то написать туда серым шрифтом
+            textField.placeholder = "Введите что-нибудь"
+            //Да, закончить
+            return true
+        }
+    }
+    
+    //Что нужно сделать перед окончанием редактирования (набора текста) в searchTextField
+//    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+//        <#code#>
+//    }
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        if let city = searchTextField.text {
+            print(city)
+            weatherManager.fetchWeather(cityName: city)
+        }
+        searchTextField.text = ""
+    }
 }
 
 // MARK: - Set Constraints
@@ -174,7 +277,7 @@ extension WeatherViewController {
             make.width.equalTo(40)
         })
         
-        condtitionalImageView.snp.makeConstraints({make in
+        condtitionImageView.snp.makeConstraints({make in
             make.width.height.equalTo(120)
         })
         

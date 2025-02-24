@@ -32,15 +32,17 @@ struct WeatherModel {
         }
     }
     
-//    init(conditionID: Int, cityName: String, tempature: Double) {
-//        self.conditionId = conditionID
-//        self.cityName = cityName
-//        self.temperature = temperature
-//    }
-//    
-//    init(weatherData; WeatherData) {
-//        self.conditionId = weatherData.weather[0].id
-//        self.cityName = weatherData.name
-//        self.temperature = weatherData.main.temperature
-//    }
+    //инициализатор по умолчанию (если у нас есть хотя бы один инициализатор, отличный от инициализатора по умолчанию, то его нам просто необходимо прописать)
+    init(conditionId: Int, cityName: String, temperature: Double) {
+        self.conditionId = conditionId
+        self.cityName = cityName
+        self.temperature = temperature
+    }
+    
+    //дополнительный инициализатор
+    init(weatherData: WeatherData) {
+        self.conditionId = weatherData.weather[0].id
+        self.cityName = weatherData.name
+        self.temperature = weatherData.main.temp
+    }
 }
